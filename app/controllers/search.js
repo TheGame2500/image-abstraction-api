@@ -3,20 +3,15 @@ var query = require('../models/query-cache.js');
 var imgur = require('imgur-search');
 var findImages = new imgur('cc48bdd8d933793');
 
-module.exports = function (word, offset, res) {
+module.exports = function (word, offset, callback) {
     query.saveQuery(word);
-    process.env.IMGUR_CLIENT_KEY;
-    findImages.search(word, 'top', offset)
+    findImages.search(word, "top",offset)
                     .done(function(data){
-                        return res.status(201).json(data); 
+                        callback(null,data);
                     })
-                    .fail(function(error){
-                        return handleError(res, error);
-                    });
-}
-
-function handleError(res, err) {
-    return res.status(500).send(err);
+                    .fail(function(err,data){
+                        callback(err,data)
+                    })
 }
 
 

@@ -19,11 +19,11 @@ module.exports =
         })
     },
     
-    getQueries : function(res){
+    getQueries : function(callback){
             var query = record.find({},{_id:0, term:1, when:1}).sort({"when":-1}).limit(10);
-            return query.exec(function(err, results){
+            return (query.exec(function(err, results){
                 if(err) throw err;
-                return res.json(results);
-            })
+                callback(results);
+            }))
     }
 }
